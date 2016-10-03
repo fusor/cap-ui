@@ -15,5 +15,6 @@ Uses an express based webpack development server, includes [HMR](https://webpack
 
 `npm start` launches the development server, bundle is output to `build`
 
-Served at `http://localhost:3000`. API is configured in `src/shared/api.js` and is
-configured to talk to `http://cap.example.com:3001`
+Served at `http://localhost:3000`.
+
+API is configured in `src/shared/api.js`; configured to talk to `http://cap.example.com:3001`
