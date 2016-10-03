@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 const projRoot = path.join(__dirname, '..');
-const clientRoot = path.join(projRoot, 'client');
+const clientRoot = path.join(projRoot, 'src');
 const buildDir = path.join(projRoot, 'build');
 const sharedStylesDir = path.join(clientRoot, 'shared', 'styles');
 
