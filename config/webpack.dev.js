@@ -5,6 +5,7 @@ const projRoot = path.join(__dirname, '..');
 const clientRoot = path.join(projRoot, 'src');
 const buildDir = path.join(projRoot, 'build');
 const sharedStylesDir = path.join(clientRoot, 'shared', 'styles');
+const fusorConfig = path.join(__dirname, 'fusor');
 
 const wpConfig = {
   debug: true,
@@ -18,7 +19,7 @@ const wpConfig = {
       {
         test: /\.jsx?$/,
         loaders: ['babel'],
-        include: clientRoot,
+        include: [clientRoot, fusorConfig],
         exclude: /test.*spec.js$/
       },
       {
