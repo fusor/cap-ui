@@ -1,0 +1,1 @@
+{"nulecule":{"etherpad-app":{"db_host":"mariadb","db_name":"None","db_pass":"None","db_port":"3306","db_user":"None","hostport":"9001","image":"centos/etherpad"},"general":{"namespace":"default","provider":"kubernetes"},"mariadb-atomicapp":{"db_name":"None","db_pass":"None","db_user":"None","image":"centos/mariadb","root_pass":"MySQLPass"}}}

@@ -11,4 +11,5 @@ else
   ln -sf $fusor_config_dir/vagrant.js $fusor_config_dir/config.js
 fi
 
-node $project_root/dev_srv.js
+#node $project_root/dev_srv.js
+nodemon $project_root/dev_srv.js

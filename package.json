@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "jsonfile": "^2.4.0",
     "mocha": "^2.5.3"
   }
 }
