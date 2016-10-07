@@ -1,9 +1,9 @@
-const API_RESOURCE_BASE = 'http://cap.example.com:3001';
+import config from '../../config/fusor/config';
 
 export function getBaseUrl() {
-  return `${API_RESOURCE_BASE}`;
+  return `${config.apiRoot}`;
 }
 
 export function getResourceUrl(resource) {
-  return `${API_RESOURCE_BASE}/${resource}`;
+  return `${config.apiRoot}/${resource}`;
 }

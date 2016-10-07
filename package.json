@@ -4,7 +4,8 @@
   "description": "\"Minimal React + HMR starter\"",
   "main": "index.js",
   "scripts": {
-    "start": "node dev_srv.js",
+    "dev": "./.start_srv.sh",
+    "dev:mocked": "MOCKS_ENABLED=TRUE ./.start_srv.sh",
     "test": "mocha ./src/**/*.spec.js --compilers js:babel-core/register",
     "test:dev": "mocha ./src/**/*.spec.js --compilers js:babel-core/register --watch"
   },
