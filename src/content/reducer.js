@@ -32,7 +32,7 @@ const nuleculesReducer = (prevState={}, action) => {
   return nextState;
 }
 
-const deploymentsReducer= (prevState={}, action) => {
+const deploymentsReducer = (prevState={}, action) => {
   let nextState = prevState;
   const {type, payload, meta} = action;
   let deploymentId;
@@ -58,4 +58,23 @@ const deploymentsReducer= (prevState={}, action) => {
   return nextState;
 }
 
-export { nuleculesReducer, deploymentsReducer }
+const bindingsReducer = (prevState={}, action) => {
+  let nextState = prevState;
+  const {type, payload, meta} = action;
+
+  switch(action.type) {
+    case actionTypes.LOAD_NULECULE_FULFILLED:
+      nextState = Object.assign({}, prevState, {
+        [action.meta.nuleculeId]: payload.data.bindings
+      });
+      break;
+  }
+
+  return nextState;
+}
+
+export {
+  nuleculesReducer,
+  deploymentsReducer,
+  bindingsReducer
+}

@@ -1,1 +1,44 @@
-{"nulecule":{"etherpad-app":{"db_host":"mariadb","db_name":"None","db_pass":"None","db_port":"3306","db_user":"None","hostport":"9001","image":"centos/etherpad"},"general":{"namespace":"default","provider":"kubernetes"},"mariadb-atomicapp":{"db_name":"None","db_pass":"None","db_user":"None","image":"centos/mariadb","root_pass":"MySQLPass"}}}
+{
+   "nulecule" : {
+      "etherpad-app" : {
+         "db_pass" : "None",
+         "db_name" : "None",
+         "db_host" : "mariadb",
+         "db_port" : "3306",
+         "image" : "centos/etherpad",
+         "hostport" : "9001",
+         "db_user" : "None"
+      },
+      "general" : {
+         "namespace" : "default",
+         "provider" : "kubernetes"
+      },
+      "mariadb-atomicapp" : {
+         "db_pass" : "None",
+         "db_name" : "None",
+         "image" : "centos/mariadb",
+         "db_user" : "None",
+         "root_pass" : "MySQLPass"
+      }
+   },
+   "bindings": [
+     {
+       "src": "etherpad-app",
+       "src_key": "db_pass",
+       "dest": "mariadb-atomicapp",
+       "dest_key": "db_pass"
+     },
+     {
+       "src": "etherpad-app",
+       "src_key": "db_name",
+       "dest": "mariadb-atomicapp",
+       "dest_key": "db_name"
+     },
+     {
+       "src": "etherpad-app",
+       "src_key": "db_user",
+       "dest": "mariadb-atomicapp",
+       "dest_key": "db_user"
+     }
+   ]
+}

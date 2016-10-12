@@ -6,7 +6,7 @@ import actions from '../actions';
 
 class GraphNodeForm extends React.Component {
   render() {
-    const { name, answers, onAnswerChange } = this.props;
+    const { name, answers, onAnswerChange, destKeyMap } = this.props;
 
     const renderInputs = () => {
       return Object.keys(answers).map((answer, idx) => {
@@ -17,12 +17,22 @@ class GraphNodeForm extends React.Component {
           <div className="answer-input clearfix" key={idx}>
             <label htmlFor={inputId} className="col-xs-2 col-form-label" >{answer}</label>
             <div className="col-xs-10">
-              <input className="form-control"
-                id={inputId}
-                type="text"
-                data-answer-key={answer}
-                value={value}
-                onChange={this.onInputChange.bind(this)}/>
+              {(() => {
+                return destKeyMap[answer] ?
+                  <input className="form-control"
+                    id={inputId}
+                    type="text"
+                    data-answer-key={answer}
+                    value={value}
+                    disabled
+                    onChange={this.onInputChange.bind(this)}/> :
+                  <input className="form-control"
+                    id={inputId}
+                    type="text"
+                    data-answer-key={answer}
+                    value={value}
+                    onChange={this.onInputChange.bind(this)}/>;
+              })()}
             </div>
           </div>
         );
