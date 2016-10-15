@@ -4,10 +4,12 @@
   "description": "\"Minimal React + HMR starter\"",
   "main": "index.js",
   "scripts": {
+    "build": "./.build.sh",
     "dev": "./.start_srv.sh",
     "dev:mocked": "MOCKS_ENABLED=TRUE ./.start_srv.sh",
     "test": "mocha ./src/**/*.spec.js --compilers js:babel-core/register",
-    "test:dev": "mocha ./src/**/*.spec.js --compilers js:babel-core/register --watch"
+    "test:dev": "mocha ./src/**/*.spec.js --compilers js:babel-core/register --watch",
+    "__build": "webpack --config ./config/webpack.dev.js"
   },
   "repository": {
     "type": "git",
