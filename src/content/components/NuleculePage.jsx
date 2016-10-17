@@ -11,12 +11,26 @@ class NuleculePage extends React.Component {
   componentWillMount() {
     this.props.loadNulecule(this.props.params.nuleculeId);
   }
+  handleAnswerChange(nuleculeId, nodeName, key, value) {
+    this.props.dispatchAnswerChanged(...arguments);
+
+    // Propogate change to any dests where the src node/key matches
+    this.props.bindings[nuleculeId].filter((b) => {
+      return b.src === nodeName && b.src_key === key;
+    }).forEach((b) => {
+      this.props.dispatchAnswerChanged(nuleculeId, b.dest, b.dest_key, value);
+    });
+  }
   render() {
     const { nuleculeId } = this.props.params;
 
     let nulecule;
+    let bindings;
     if(this.props.nulecules && this.props.nulecules[nuleculeId]) {
       nulecule = this.props.nulecules[nuleculeId];
+    }
+    if(this.props.bindings && this.props.bindings[nuleculeId]) {
+      bindings = this.props.bindings[nuleculeId];
     }
 
     const renderJson = (header, json) => {
@@ -36,10 +50,19 @@ class NuleculePage extends React.Component {
       return Object.keys(nulecule)
           .filter((key) => key !== 'general')
           .map((nodeName, idx) => {
+
+            const destKeyMap = bindings
+              .filter((b) => b.dest === nodeName)
+              .reduce((keyMap, b) => {
+                keyMap[b.dest_key] = true;
+                return keyMap;
+              }, {});
+
             return <GraphNodeForm key={idx}
                 name={nodeName}
                 answers={nulecule[nodeName]}
-                onAnswerChange={this.props.answerChanged.bind(null, nuleculeId, nodeName)} />
+                destKeyMap={destKeyMap}
+                onAnswerChange={this.handleAnswerChange.bind(this, nuleculeId, nodeName)} />
           });
     };
 
@@ -76,7 +99,8 @@ class NuleculePage extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    nulecules: state.nulecules
+    nulecules: state.nulecules,
+    bindings: state.bindings
   };
 };
 
@@ -87,7 +111,9 @@ const mapDispatchToProps = (dispatch, props, state) => {
     postAnswers: (nuleculeId) => {
       dispatch(actions.postAnswers(nuleculeId, props.history))
     },
-    answerChanged: function() { dispatch(actions.answerChanged(...arguments)) }
+    dispatchAnswerChanged: function() {
+      dispatch(actions.answerChanged(...arguments))
+    }
   };
 };
 
