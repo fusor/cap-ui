@@ -13,7 +13,7 @@ node & npm (tested in 6.5.0)
 
 Uses an express based webpack development server, includes [HMR](https://webpack.github.io/docs/hot-module-replacement-with-webpack.html).
 
-`npm start` launches the development server, bundle is output to `build`
+`npm run dev` launches the development server, bundle is output to `build`
 
 Served at `http://localhost:3000`.
 
