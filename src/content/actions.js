@@ -26,9 +26,8 @@ const actions = {
       payload: axios(url)
     };
   },
-  loadNulecule: (nuleculeId) => {
-    const url = getBaseUrl() + '/nulecules/' + nuleculeId;
-
+  loadNulecule: (registry, nuleculeId) => {
+    const url = nuleculeUrl(registry, nuleculeId);
     return {
       type: actionTypes.LOAD_NULECULE,
       payload: axios(url),
@@ -37,8 +36,9 @@ const actions = {
       }
     };
   },
-  postAnswers: (nuleculeId, history) => {
-    const url = `${getBaseUrl()}/nulecules/${nuleculeId}`;
+  postAnswers: (registry, nuleculeId, history) => {
+    const url = nuleculeUrl(registry, nuleculeId);
+
     // Chaining actions with redux-promise-middleware
     return (dispatch, getState) => { // Thunk
       const postAnswers = getState().nulecules[nuleculeId]
@@ -52,7 +52,7 @@ const actions = {
 
         dispatch(actions.initDeploy(projectId));
 
-        const reviewPath = `/nulecules/${nuleculeId}/review/${projectId}`;
+        const reviewPath = `/nulecules/${registry}/${nuleculeId}/review/${projectId}`;
         history.push(reviewPath);
       });
     }
@@ -63,8 +63,9 @@ const actions = {
       payload: {nuleculeId, nodeName, answerKey, newValue}
     };
   },
-  deploy: (nuleculeId, projectId) => {
-    const url = `${getBaseUrl()}/nulecules/${nuleculeId}/deploy`;
+  deploy: (registry, nuleculeId, projectId) => {
+    const url = `${nuleculeUrl(registry, nuleculeId)}/deploy`;
+
     return {
       type: actionTypes.DEPLOY,
       payload: axios.post(url),
@@ -78,6 +79,10 @@ const actions = {
     }
   }
 };
+
+function nuleculeUrl(registry, nuleculeId) {
+  return `${getBaseUrl()}/nulecules/${registry}/${nuleculeId}`;
+}
 
 export { actionTypes };
 export default actions;

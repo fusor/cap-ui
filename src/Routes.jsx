@@ -11,8 +11,8 @@ const Routes = () => {
   return (
     <Router history={hashHistory}>
       <Route path="/" component={HomePage} />
-      <Route path="/nulecules/:nuleculeId" component={NuleculePage} />
-      <Route path="/nulecules/:nuleculeId/review/:deploymentId" component={NuleculeReviewPage} />
+      <Route path="/nulecules/:registry/:nuleculeId" component={NuleculePage} />
+      <Route path="/nulecules/:registry/:nuleculeId/review/:deploymentId" component={NuleculeReviewPage} />
     </Router>
   );
 };

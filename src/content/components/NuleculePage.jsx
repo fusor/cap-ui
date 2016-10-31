@@ -9,7 +9,9 @@ import GraphNodeForm from './GraphNodeForm';
 
 class NuleculePage extends React.Component {
   componentWillMount() {
-    this.props.loadNulecule(this.props.params.nuleculeId);
+    const { registry, nuleculeId } = this.props.params;
+    console.debug(this.props.params)
+    this.props.loadNulecule(registry, nuleculeId);
   }
   handleAnswerChange(nuleculeId, nodeName, key, value) {
     this.props.dispatchAnswerChanged(...arguments);
@@ -22,7 +24,7 @@ class NuleculePage extends React.Component {
     });
   }
   render() {
-    const { nuleculeId } = this.props.params;
+    const { registry, nuleculeId } = this.props.params;
 
     let nulecule;
     let bindings;
@@ -78,12 +80,12 @@ class NuleculePage extends React.Component {
       // No content yet, loading
       content = (
         <Jumbotron>
-          <h2>Loading...</h2>
+          <h2>Downloading, please wait...</h2>
         </Jumbotron>
       )
     }
 
-    const onButtonClick = this.props.postAnswers.bind(this, nuleculeId)
+    const onButtonClick = this.props.postAnswers.bind(this, registry, nuleculeId)
 
     return (
       <Layout>
@@ -107,9 +109,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props, state) => {
   return {
     loadNulecules: () => dispatch(actions.loadNulecules()),
-    loadNulecule: (nuleculeId) => dispatch(actions.loadNulecule(nuleculeId)),
-    postAnswers: (nuleculeId) => {
-      dispatch(actions.postAnswers(nuleculeId, props.history))
+    loadNulecule: function() { dispatch(actions.loadNulecule(...arguments)) },
+    postAnswers: (registry, nuleculeId) => {
+      dispatch(actions.postAnswers(registry, nuleculeId, props.history))
     },
     dispatchAnswerChanged: function() {
       dispatch(actions.answerChanged(...arguments))
