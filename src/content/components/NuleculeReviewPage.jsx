@@ -7,8 +7,7 @@ import Layout from '../../base/components/Layout';
 
 class NuleculeReviewPage extends React.Component {
   render() {
-    const { nuleculeId, deploymentId } = this.props.params;
-    console.debug("got deployment id -> ", deploymentId);
+    const { registry, nuleculeId, deploymentId } = this.props.params;
 
     let nulecule;
     if(this.props.nulecules && this.props.nulecules[nuleculeId]) {
@@ -22,7 +21,7 @@ class NuleculeReviewPage extends React.Component {
       deploymentStatus = deployment.status;
     }
 
-    const onDeployClick = this.props.deploy.bind(this, nuleculeId, deploymentId);
+    const onDeployClick = this.props.deploy.bind(this, registry, nuleculeId, deploymentId);
 
     return (
       <Layout>
@@ -52,8 +51,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deploy: (nuleculeId, deploymentId) => {
-      dispatch(actions.deploy(nuleculeId, deploymentId))
+    deploy: function() {
+      dispatch(actions.deploy(...arguments))
     }
   };
 };
