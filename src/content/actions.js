@@ -15,6 +15,7 @@ const actionTypes = {
   DEPLOY_PENDING: 'content.DEPLOY_PENDING',
   DEPLOY_FULFILLED: 'content.DEPLOY_FULFILLED',
   DEPLOY_INIT: 'content.DEPLOY_INIT',
+  DEPLOY_STATUS_UPDATE: 'content.DEPLOY_STATUS_UPDATE',
 };
 
 const actions = {
@@ -32,7 +33,7 @@ const actions = {
       type: actionTypes.LOAD_NULECULE,
       payload: axios(url),
       meta: {
-        nuleculeId: nuleculeId
+        nuleculeId: fullNuleculeId(registry, nuleculeId)
       }
     };
   },
@@ -41,7 +42,7 @@ const actions = {
 
     // Chaining actions with redux-promise-middleware
     return (dispatch, getState) => { // Thunk
-      const postAnswers = getState().nulecules[nuleculeId]
+      const postAnswers = getState().nulecules[fullNuleculeId(registry, nuleculeId)]
       return dispatch({ // Promise
         type: 'POST_ANSWERS',
         payload: axios.post(url, {nulecule: postAnswers})
@@ -57,10 +58,15 @@ const actions = {
       });
     }
   },
-  answerChanged: (nuleculeId, nodeName, answerKey, newValue) => {
+  answerChanged: (registry, nuleculeId, nodeName, answerKey, newValue) => {
     return {
       type: actionTypes.ANSWER_CHANGED,
-      payload: {nuleculeId, nodeName, answerKey, newValue}
+      payload: {
+        nuleculeId: fullNuleculeId(registry, nuleculeId),
+        nodeName,
+        answerKey,
+        newValue
+      }
     };
   },
   deploy: (registry, nuleculeId, projectId) => {
@@ -77,11 +83,21 @@ const actions = {
       type: actionTypes.DEPLOY_INIT,
       payload: { projectId }
     }
+  },
+  deployStatusUpdate: (deploymentId, newStatus) => {
+    return {
+      type: actionTypes.DEPLOY_STATUS_UPDATE,
+      payload: {deploymentId, newStatus}
+    }
   }
 };
 
 function nuleculeUrl(registry, nuleculeId) {
   return `${getBaseUrl()}/nulecules/${registry}/${nuleculeId}`;
+}
+
+function fullNuleculeId(registry, nuleculeId) {
+  return `${registry}/${nuleculeId}`;
 }
 
 export { actionTypes };
