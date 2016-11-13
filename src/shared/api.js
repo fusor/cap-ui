@@ -7,3 +7,7 @@ export function getBaseUrl() {
 export function getResourceUrl(resource) {
   return `${config.apiRoot}/${resource}`;
 }
+
+export function getHealthCheckUrl() {
+  return `${config.apiRoot}/health-check`;
+}
