@@ -9,6 +9,8 @@ import Layout from './base/components/Layout';
 import rootReducer from './rootReducer';
 import Routes from './Routes';
 
+import io from 'socket.io-client';
+
 const store = createStore(
   rootReducer,
   applyMiddleware(thunkMiddleware, promiseMiddleware(), loggerMiddleware())
@@ -22,3 +24,23 @@ ReactDOM.render(
   </Provider>,
   mountPoint
 );
+
+dd('attempting to connect to socket');
+
+const socket = io();
+
+socket.on('connect', () => {
+  dd('connected')
+});
+
+socket.on('firehose', (msg) => {
+  dd('ff -> ' + msg)
+});
+
+socket.on('disconnect', () => {
+  dd('disconnected')
+});
+
+function dd(msg) {
+  console.debug(msg);
+}
