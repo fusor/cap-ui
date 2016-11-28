@@ -10,29 +10,35 @@ import GraphNodeForm from './GraphNodeForm';
 class NuleculePage extends React.Component {
   componentWillMount() {
     const { registry, nuleculeId } = this.props.params;
-    console.debug(this.props.params)
     this.props.loadNulecule(registry, nuleculeId);
   }
   handleAnswerChange(nuleculeId, nodeName, key, value) {
-    this.props.dispatchAnswerChanged(...arguments);
+    const { registry } = this.props.params;
+    const args = Array.prototype.slice.call(arguments); // clone
+    args.unshift(registry);
+
+    this.props.dispatchAnswerChanged(...args);
+
+    const fullNuleculeId = genFullNuleculeId(registry, nuleculeId);
 
     // Propogate change to any dests where the src node/key matches
-    this.props.bindings[nuleculeId].filter((b) => {
+    this.props.bindings[fullNuleculeId].filter((b) => {
       return b.src === nodeName && b.src_key === key;
     }).forEach((b) => {
-      this.props.dispatchAnswerChanged(nuleculeId, b.dest, b.dest_key, value);
+      this.props.dispatchAnswerChanged(registry, nuleculeId, b.dest, b.dest_key, value);
     });
   }
   render() {
     const { registry, nuleculeId } = this.props.params;
+    const fullNuleculeId = genFullNuleculeId(registry, nuleculeId)
 
     let nulecule;
     let bindings;
-    if(this.props.nulecules && this.props.nulecules[nuleculeId]) {
-      nulecule = this.props.nulecules[nuleculeId];
+    if(this.props.nulecules && this.props.nulecules[fullNuleculeId]) {
+      nulecule = this.props.nulecules[fullNuleculeId];
     }
-    if(this.props.bindings && this.props.bindings[nuleculeId]) {
-      bindings = this.props.bindings[nuleculeId];
+    if(this.props.bindings && this.props.bindings[fullNuleculeId]) {
+      bindings = this.props.bindings[fullNuleculeId];
     }
 
     const renderJson = (header, json) => {
@@ -69,7 +75,7 @@ class NuleculePage extends React.Component {
     };
 
     let content;
-    if(nulecule) {
+    if(nulecule && Object.keys(nulecule).length !== 0) {
       content = (
         <div>
           {renderJson("General", nulecule.general)}
@@ -118,6 +124,10 @@ const mapDispatchToProps = (dispatch, props, state) => {
     }
   };
 };
+
+function genFullNuleculeId(registry, nuleculeId) {
+  return `${registry}/${nuleculeId}`;
+}
 
 export default connect(
   mapStateToProps,

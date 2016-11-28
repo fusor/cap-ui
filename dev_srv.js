@@ -43,12 +43,12 @@ app.get('/nulecules', (req, res) => {
   res.json(m_nulecules);
 });
 
-app.get('/nulecules/:nuleculeId', (req, res) => {
+app.get('/nulecules/:registry/:nuleculeId', (req, res) => {
   console.log(`nulecule detail ${req.params.nuleculeId}`);
   res.json(m_nulecule_detail);
 });
 
-app.post('/nulecules/:nuleculeId', (req, res) => {
+app.post('/nulecules/:registry/:nuleculeId', (req, res) => {
   console.log('got response -> ', req.body);
   jsonfile.writeFileSync(m_answer_file, req.body);
   res.json({
@@ -60,8 +60,8 @@ app.post('/nulecules/:nuleculeId', (req, res) => {
   });
 });
 
-app.post('/nulecules/:nuleculeId/deploy', (req, res) => {
+app.post('/nulecules/:registry/:nuleculeId/deploy', (req, res) => {
   setTimeout(() => {
     res.json({result: 'success'});
-  }, 3000);
+  }, 5000);
 });

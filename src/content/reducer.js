@@ -50,7 +50,12 @@ const deploymentsReducer = (prevState={}, action) => {
       break;
     case actionTypes.DEPLOY_FULFILLED:
       nextState = Object.assign({}, prevState, {
-        [meta.deploymentId]: {status: "Success!"}
+        [meta.deploymentId]: {status: "Waiting for pods..."}
+      });
+      break;
+    case actionTypes.DEPLOY_STATUS_UPDATE:
+      nextState = Object.assign({}, prevState, {
+        [payload.deploymentId]: {status: payload.newStatus}
       });
       break;
   }
