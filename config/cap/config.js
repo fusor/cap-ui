@@ -1,1 +1,0 @@
-/home/ernelson/cap/cap-ui/config/cap/vagrant.js

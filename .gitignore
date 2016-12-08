@@ -1,5 +1,5 @@
 node_modules/
 build/
 npm-debug.log
-config/fusor/config.js
+config/cap/config.js
 mocks/submitted_data/
