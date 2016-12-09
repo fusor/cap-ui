@@ -2,11 +2,15 @@ import { combineReducers } from 'redux';
 import {
   nuleculesReducer,
   deploymentsReducer,
-  bindingsReducer
+  bindingsReducer,
+  uiReducer,
+  jobsReducer,
 } from './content/reducer';
 
 export default combineReducers({
   nulecules: nuleculesReducer,
   deployments: deploymentsReducer,
-  bindings: bindingsReducer
+  bindings: bindingsReducer,
+  ui: uiReducer,
+  jobs: jobsReducer,
 });

@@ -1,5 +1,41 @@
 import actions, { actionTypes } from './actions';
 
+const defaultUi= {
+  home: {
+    details: {
+      org: "fusordevel",
+      username: "",
+      password: "",
+    },
+    isLoading: false,
+  }
+};
+
+const uiReducer = (prevState=defaultUi, action) => {
+  let nextState = prevState;
+  const {type, payload} = action;
+
+  let newHome;
+
+  switch(action.type) {
+    case actionTypes.LOAD_NULECULES_PENDING:
+      newHome = Object.assign({}, prevState.home, {isLoading: true});
+      nextState = Object.assign({}, prevState, {home: newHome});
+      break;
+    case actionTypes.LOAD_NULECULES_FULFILLED:
+    case actionTypes.LOAD_NULECULES_REJECTED:
+      newHome = Object.assign({}, prevState.home, {isLoading: false});
+      nextState = Object.assign({}, prevState, {home: newHome});
+      break;
+    case actionTypes.HOME_DETAIL_CHANGED:
+      newHome = Object.assign({}, prevState.home, {details: payload});
+      nextState = Object.assign({}, prevState, {home: newHome});
+      break;
+  }
+
+  return nextState;
+};
+
 const nuleculesReducer = (prevState={}, action) => {
   let nextState = prevState;
   const {type, payload, meta} = action;
@@ -58,6 +94,13 @@ const deploymentsReducer = (prevState={}, action) => {
         [payload.deploymentId]: {status: payload.newStatus}
       });
       break;
+    case actionTypes.INIT_JOB:
+      const deployment = prevState[payload.deploymentId];
+      const newDeployment = Object.assign({}, deployment, {job: payload.token});
+      nextState = Object.assign({}, prevState, {
+        [payload.deploymentId]: newDeployment
+      });
+      break;
   }
 
   return nextState;
@@ -78,8 +121,29 @@ const bindingsReducer = (prevState={}, action) => {
   return nextState;
 }
 
+const jobsReducer = (prevState={}, action) => {
+  let nextState = prevState;
+  const {type, payload, meta} = action;
+
+  switch(action.type) {
+    case actionTypes.UPDATE_JOB:
+      const {token, msg} = payload;
+      nextState = Object.assign({}, prevState, {
+        [token]: {
+          msg,
+          updated: Date.now()
+        }
+      });
+      break;
+  }
+
+  return nextState;
+}
+
 export {
   nuleculesReducer,
   deploymentsReducer,
-  bindingsReducer
+  bindingsReducer,
+  uiReducer,
+  jobsReducer,
 }

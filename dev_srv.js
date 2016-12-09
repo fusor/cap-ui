@@ -39,16 +39,16 @@ const m_answer_file = path.join(__dirname, "mocks","submitted_data", "answers.js
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/nulecules', (req, res) => {
+app.post('/api/nulecules', (req, res) => {
   res.json(m_nulecules);
 });
 
-app.get('/nulecules/:registry/:nuleculeId', (req, res) => {
+app.get('/api/nulecules/:registry/:nuleculeId', (req, res) => {
   console.log(`nulecule detail ${req.params.nuleculeId}`);
   res.json(m_nulecule_detail);
 });
 
-app.post('/nulecules/:registry/:nuleculeId', (req, res) => {
+app.post('/api/nulecules/:registry/:nuleculeId', (req, res) => {
   console.log('got response -> ', req.body);
   jsonfile.writeFileSync(m_answer_file, req.body);
   res.json({
@@ -60,7 +60,7 @@ app.post('/nulecules/:registry/:nuleculeId', (req, res) => {
   });
 });
 
-app.post('/nulecules/:registry/:nuleculeId/deploy', (req, res) => {
+app.post('/api/nulecules/:registry/:nuleculeId/deploy', (req, res) => {
   setTimeout(() => {
     res.json({result: 'success'});
   }, 5000);

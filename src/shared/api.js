@@ -1,4 +1,4 @@
-import config from '../../config/fusor/config';
+import config from '../../config/cap/config';
 
 export function getBaseUrl() {
   return `${config.apiRoot}`;
