@@ -16,15 +16,25 @@ const actionTypes = {
   DEPLOY_FULFILLED: 'content.DEPLOY_FULFILLED',
   DEPLOY_INIT: 'content.DEPLOY_INIT',
   DEPLOY_STATUS_UPDATE: 'content.DEPLOY_STATUS_UPDATE',
+  SUBSCRIBE_JOB: 'content.SUBSCRIBE_JOB',
+  INIT_JOB: 'content.INIT_JOB',
+  UPDATE_JOB: 'content.UPDATE_JOB',
+  HOME_DETAIL_CHANGED: 'content.HOME_DETAIL_CHANGED',
 };
 
 const actions = {
-  loadNulecules: () => {
+  homeDetailChanged: (org, username, password) => {
+    return {
+      type: actionTypes.HOME_DETAIL_CHANGED,
+      payload: {org, username, password}
+    };
+  },
+  loadNulecules: (org, username, password) => {
     const url = getBaseUrl() + '/nulecules';
 
     return {
       type: actionTypes.LOAD_NULECULES,
-      payload: axios(url)
+      payload: axios.post(url, {org, username, password})
     };
   },
   loadNulecule: (registry, nuleculeId) => {
@@ -69,13 +79,27 @@ const actions = {
       }
     };
   },
-  deploy: (registry, nuleculeId, projectId) => {
+  deploy: (registry, nuleculeId, deploymentId) => {
     const url = `${nuleculeUrl(registry, nuleculeId)}/deploy`;
 
-    return {
-      type: actionTypes.DEPLOY,
-      payload: axios.post(url),
-      meta: { deploymentId: projectId }
+    return (dispatch, getState) => {
+      return dispatch({
+        type: actionTypes.DEPLOY,
+        payload: axios.post(url),
+        meta: { deploymentId }
+      }).then(({value}) => {
+        const token = value.data.job_token;
+        console.debug('subscribing to job in deploy...');
+        dispatch({
+          type: actionTypes.SUBSCRIBE_JOB,
+          payload: {token},
+          meta: {
+            nuleculeId: fullNuleculeId(registry, nuleculeId)
+          }
+        });
+
+        dispatch(actions.initJob(deploymentId, token))
+      });
     }
   },
   initDeploy: (projectId) => {
@@ -88,6 +112,18 @@ const actions = {
     return {
       type: actionTypes.DEPLOY_STATUS_UPDATE,
       payload: {deploymentId, newStatus}
+    }
+  },
+  initJob: (deploymentId, token) => {
+    return {
+      type: actionTypes.INIT_JOB,
+      payload: {deploymentId, token}
+    }
+  },
+  updateJob: (token, msg) => {
+    return {
+      type: actionTypes.UPDATE_JOB,
+      payload: {token, msg}
     }
   }
 };
